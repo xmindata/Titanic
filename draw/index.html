@@ -1,0 +1,108 @@
+<html>
+<style>
+      div.type_buttons {
+        position: fixed;
+        top: 20px;
+        left: 750px;
+      }
+      div.type_buttons div {
+        background-color: lightBlue;
+        padding: 5px;
+        margin: 10px;
+      }
+      div.text {
+        position:fixed;
+        bottom: 50px;
+        right: 75px;
+        width: 300px;
+        height:300px;
+        border: 15px groove #1E90FF;
+        text-shadow: 0 0 2px #FF0000;
+        text-align: justify;
+        font: 20px sans-serif;
+      }
+    </style>
+
+<div id="chartContainer">
+  <script src="http://d3js.org/d3.v4.min.js"></script>
+  <script src="http://dimplejs.org/dist/dimple.v2.3.0.min.js"></script>
+  <script type="text/javascript">
+
+function draw(data){
+  "use strict";
+
+  function update_which_group(wg) {
+                     create_chart(wg)
+                     return wg};
+
+    // update chart which category of data to show
+  function create_chart(which_group){
+      var chart1 = svg.selectAll('*').remove();
+      // filter the data base on different categories
+      if (which_group==="Overview"){
+        var button = null;}
+      if (which_group==="Agegroup"){
+        var button = "Agegroup";}
+      if (which_group==="Sex"){
+        var button = "Sex";}
+
+      chart1 = draw_chart(button);
+      chart1.assignColor('Died', "red", "black", 0.5);
+      chart1.draw();};
+
+
+  function draw_chart(button){
+      var myChart = new dimple.chart(svg, data);
+      var x = myChart.addCategoryAxis("x", ["Pclass",button]);
+      myChart.addMeasureAxis("y", "Count");
+      myChart.addSeries("Status", dimple.plot.bar);
+      myChart.addLegend(200, 20, 520, 20, "right");
+      // How to change the text of legend?
+      return myChart
+
+    }
+
+  // create inicial chart
+  var svg = dimple.newSvg("#chartContainer", 800, 600);
+  var button = null;
+  var myChart = new dimple.chart(svg, data);
+  create_chart('Overview')
+
+
+  //create buttons and set its initial value
+  var button_labels = ["Overview", "Agegroup","Sex"];
+  var buttons = d3.select("body")
+                   .append("div")
+                   .attr("class", "type_buttons")
+                   .selectAll("div")
+                   .data(button_labels)
+                   .enter()
+                   .append("div")
+                   .text(function(d) {
+                       return d;
+                      });
+
+  //create movements when the buttons were clicked
+  buttons.on("click", function(d) {
+                d3.select(".type_buttons")//change the style to the origin one
+                  .selectAll("div")
+                  .transition()
+                  .duration(500)
+                  .style("color", "black")
+                  .style("background", "lightBlue");
+
+                d3.select(this)//change the style to a new one
+                  .transition()
+                  .duration(500)
+                  //.style("background", "white")
+                  .style("color", "white");
+                  which_group = update_which_group(d);
+              });
+  }
+  </script>
+
+  <script type="text/javascript">
+          d3.csv("titan.csv", draw); // load data
+  </script>
+</div>
+</html>

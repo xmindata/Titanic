@@ -1,25 +1,25 @@
 <html>
+
+
+
 <style>
+      div.ttl {
+        font: 20px sans-serif;
+        color: rgb(152,192, 218);
+      }
       div.type_buttons {
         position: fixed;
-        top: 20px;
-        left: 750px;
+        top: 130px;
+        left: 700px;
       }
       div.type_buttons div {
-        background-color: lightBlue;
+        background-color: rgb(152,192, 218);
         padding: 5px;
         margin: 10px;
       }
       div.text {
-        position:fixed;
-        bottom: 50px;
-        right: 75px;
-        width: 300px;
-        height:300px;
-        border: 15px groove #1E90FF;
-        text-shadow: 0 0 2px #FF0000;
-        text-align: justify;
-        font: 20px sans-serif;
+        font: 12px sans-serif;
+        width: 700px;
       }
     </style>
 
@@ -31,19 +31,20 @@
 function draw(data){
   "use strict";
 
-  function update_which_group(wg) {
+
+  function update_button(wg) {
                      create_chart(wg)
                      return wg};
 
     // update chart which category of data to show
-  function create_chart(which_group){
+  function create_chart(button_label){
       var chart1 = svg.selectAll('*').remove();
       // filter the data base on different categories
-      if (which_group==="Overview"){
+      if (button_label==="Overview"){
         var button = null;}
-      if (which_group==="Agegroup"){
+      if (button_label==="Agegroup"){
         var button = "Agegroup";}
-      if (which_group==="Sex"){
+      if (button_label==="Sex"){
         var button = "Sex";}
 
       chart1 = draw_chart(button);
@@ -54,16 +55,20 @@ function draw(data){
   function draw_chart(button){
       var myChart = new dimple.chart(svg, data);
       var x = myChart.addCategoryAxis("x", ["Pclass",button]);
-      myChart.addMeasureAxis("y", "Count");
-      myChart.addSeries("Status", dimple.plot.bar);
+      var y = myChart.addMeasureAxis("y", "Count");
+
+      var mySeries = myChart.addSeries("Status", dimple.plot.bar);
       myChart.addLegend(200, 20, 520, 20, "right");
-      // How to change the text of legend?
       return myChart
 
     }
 
+
   // create inicial chart
-  var svg = dimple.newSvg("#chartContainer", 800, 600);
+  var margin =50,
+  width = 700 - margin,
+  height = 500 - margin;
+  var svg = dimple.newSvg("#chartContainer", width+margin, height+margin);
   var button = null;
   var myChart = new dimple.chart(svg, data);
   create_chart('Overview')
@@ -89,20 +94,43 @@ function draw(data){
                   .transition()
                   .duration(500)
                   .style("color", "black")
-                  .style("background", "lightBlue");
+                  .style("background", "rgb(152,192, 218)");
 
                 d3.select(this)//change the style to a new one
                   .transition()
                   .duration(500)
                   //.style("background", "white")
                   .style("color", "white");
-                  which_group = update_which_group(d);
+                  button_label = update_button(d);
               });
   }
+
+
   </script>
 
-  <script type="text/javascript">
-          d3.csv("titan.csv", draw); // load data
-  </script>
+
+  <head>
+    <title>Titanic visualization by Xueming</title>
+  </head>
+  <body>
+      <header>
+        <div class="ttl">
+          <h1> Who survivied in Titanic? </h1>
+        </div>
+      </header>
+        <div id ="chartContainer">
+          <script type="text/javascript">
+            d3.csv("titan.csv", draw); // load data
+          </script>
+        </div>
+        <div class = "text">
+          <p>
+            Who are the lucky ones in the Titanic disaster except Rose?
+            There are lots of studies about this case. Here I grouped the passengers by the class (Class one, two and three).
+            Try to <b>click the buttons</b> to see the survivals inside each group.
+            Do you have your conclusion now?
+          </p>
+        </div>
+    </body>
 </div>
 </html>

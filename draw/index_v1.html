@@ -9,7 +9,7 @@
       }
       div.type_buttons {
         position: fixed;
-        top: 185px;
+        top: 130px;
         left: 700px;
       }
       div.type_buttons div {
@@ -54,45 +54,11 @@ function draw(data){
 
   function draw_chart(button){
       var myChart = new dimple.chart(svg, data);
-      var x = myChart.addCategoryAxis("x", ["Cabinet class",button]);
-
-      var y = myChart.addPctAxis("y", "Count");
+      var x = myChart.addCategoryAxis("x", ["Pclass",button]);
+      var y = myChart.addMeasureAxis("y", "Count");
 
       var mySeries = myChart.addSeries("Status", dimple.plot.bar);
-      myChart.addLegend(200, 20, 420, 20, "right");
-
-      mySeries.afterDraw = function (shape, data) {
-                          // Get the shape as a d3 selection
-                          var s = d3.select(shape),
-                            rect = {
-                              x: parseFloat(s.attr("x")),
-                              y: parseFloat(s.attr("y")),
-                              width: parseFloat(s.attr("width")),
-                              height: parseFloat(s.attr("height"))
-
-                            };
-                            debugger
-                          // Only label bars where the text can fit
-                          if (rect.height >= 8) {
-                            // Add a text label for the value
-                            svg.append("text")
-                              // Position in the centre of the shape (vertical position is
-                              // manually set due to cross-browser problems with baseline)
-                              .attr("x", rect.x + rect.width / 2)
-
-                              .attr("y", rect.y + rect.height / 2 + 3.5)
-                              // Centre align
-                              .style("text-anchor", "middle")
-                              .style("font-size", "10px")
-                              .style("font-family", "sans-serif")
-                              // Make it a little transparent to tone down the black
-                              .style("opacity", 0.6)
-                              // Format the number
-                              .text(data.yValue);
-                          }
-                        };
-
-
+      myChart.addLegend(200, 20, 520, 20, "right");
       return myChart
 
     }
@@ -159,8 +125,8 @@ function draw(data){
         </div>
         <div class = "text">
           <p>
-            Who are the lucky ones in the Titanic disaster except <a href = "http://www.imdb.com/title/tt0120338/">Rose</a>? Among the 891 passengers, only 342 survived in the disaster.
-            There are lots of studies about this case. Here I grouped the passengers by the class (High/Mid/Low),and then grouped by the age (Child(age<12), elders(>65) and others).
+            Who are the lucky ones in the Titanic disaster except Rose?
+            There are lots of studies about this case. Here I grouped the passengers by the class (Class one, two and three).
             Try to <b>click the buttons</b> to see the survivals inside each group.
             Do you have your conclusion now?
           </p>

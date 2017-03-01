@@ -10,7 +10,7 @@
       div.type_buttons {
         position: fixed;
         top: 185px;
-        left: 700px;
+        left: 670px;
       }
       div.type_buttons div {
         background-color: rgb(152,192, 218);
@@ -55,7 +55,7 @@ function draw(data){
   function draw_chart(button){
       var myChart = new dimple.chart(svg, data);
       var x = myChart.addCategoryAxis("x", ["Cabinet class",button]);
-
+      x.addOrderRule(["Low class","Mid class","High class"]);
       var y = myChart.addPctAxis("y", "Count");
 
       var mySeries = myChart.addSeries("Status", dimple.plot.bar);
@@ -79,7 +79,6 @@ function draw(data){
                               // Position in the centre of the shape (vertical position is
                               // manually set due to cross-browser problems with baseline)
                               .attr("x", rect.x + rect.width / 2)
-
                               .attr("y", rect.y + rect.height / 2 + 3.5)
                               // Centre align
                               .style("text-anchor", "middle")

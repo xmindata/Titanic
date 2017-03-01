@@ -1,10 +1,13 @@
 ### Summary
 
-The dataset I'm using is Titanic.csv. My conclusion is "Peopole in higher class tends to survive more". In my viusalization, I made a bar chart for the overall survival rate grouped by the class. Class 1(High class) has much higher survival rate than class 2(Mid class) and class 3 (Low class), and the amount of survived people from class1 is even higher than from class3.
+The dataset I'm using is Titanic.csv. My conclusion is "Peopole in higher class tends to survive more". In my viusalization, I made a bar chart for the overall survival rate grouped by the class. Class 1(High class) has much higher survival rate than class 2(Mid class) and class 3 (Low class), and the amount of survived people from High class is even higher than from Low class though the total amounts of High class passengers are much lower.
 
 ### Design
 
-Initial design: By explortary data analysis using python, I found that the survival rate differs in different class, and also in age and sex. So i grouped the data with different class, then group the people by thier age to Child(age<12), elders(>65) and others. After this i then export the data to a new csv called "Titan.csv" and import it into the index.html file and use Dimple.js to visualize the data, including three buttons to see the survival rate by different groups.
+Initial design: By explortary data analysis using ipython, I found that the survival rate differs in different class, and also in age and sex. So i grouped the data with different class(High/Mid/Low), then group the people by thier age to Child(age<12), elders(>65) and others. After this i then export the data to a new csv called "Titan.csv" and load it into the index.html file and use Dimple.js. With the Index.html file, i first create SVG element as the canvas for the chart, then with the loaded data, I binded the data with the 'body' element and draw the "bar" for each data point with Dimple.js, then I used button.on to update the active option to visualize the data by each different group method. 
+
+For the chart itself, there are three different charts: "Overview", "Agegroup" and "Sex". In order to see the overall survival rate for each class, I created the "Overview". While age is also an important feature for the survival rate, i then grouped further to "Class/Agegroup", while the Agegroup includes "Child (age<12)", "Elders (age>65)" and "Others". Meanwhile "sex" is another important feature so i added "sex" to group the passengers based on their Genders.
+By clicking the different buttons we shall find the different chart with different group methods.
 
 ##### Deedback 1: 
 
@@ -32,8 +35,6 @@ I liked that the x-axis changed with each button, however it was confusing to se
 无法直观的看到存活率，建议添加数字。最好能够把纵轴改为存活率。
 
 ##### Feedback 3:
-1)As the default bubbles has the attribute of opacity, the intensities of bubbles mean the number of players at the same height and weight. In the course, the instructor mentioned that the intensity is very hard for quantify. So I decided to add jitter(random numbers) to these bubbles to show them in positions, therefore the audience can have an intuitive impression on the numbers of players in each group. 2) The blue circle is the mean of each group. I added it in legend so that audience could know its meaning.
-
 In your description paragraph, you mention ...in the Titanic disaster except Rose?
 Although Titanic is a popular movie, not everyone may have seen it or recall who Rose is. You can refresh their memory by maybe adding a hyperlink to Rose's IMDB page:
 ...in the Titanic disaster except [Rose](http://www.imdb.com/character/ch0002339/bio)?

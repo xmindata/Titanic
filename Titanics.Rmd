@@ -1,0 +1,124 @@
+---
+title: "Titanics"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE)
+```
+
+## R Markdown
+
+When the Titanic sank, 1502 of the 2224 passengers and crew got killed. One of the main reasons for this high level of casualties was the lack of lifeboats on this supposedly unsinkable ship.
+
+Let's start with loading in the training and testing set into  R environment. Use the training set to build your model, and the test set to validate it. The data is stored on the web as CSV files; their URLs are already available as character strings in the sample code. Load this data with the read.csv() function.
+
+```{r load.data}
+# Import the training set: train
+train_url <- "http://s3.amazonaws.com/assets.datacamp.com/course/Kaggle/train.csv"
+train <- read.csv(train_url)
+  
+# Import the testing set: test
+test_url <- "http://s3.amazonaws.com/assets.datacamp.com/course/Kaggle/test.csv"
+test <- read.csv(test_url)
+  
+# Print train and test to the console
+#train
+#test
+
+# str() -> Structure, gives information such as the data types in the data frame (e.g. int for integer), the number of observations, and the number of variables.
+str(train)
+str(test)
+```
+
+```{r}
+# Table() command can help you to explore which variables have predictive value
+# Wrap prop.table() around table(), specify whether row-wise or column-wise proportions by setting the second argument of prop.table(), called margin, to 1 or 2, respectively.
+
+# Survival rates in absolute numbers
+table(train$Survived)
+
+# Survival rates in proportions
+prop.table(table(train$Survived))
+
+# Two-way comparison: Sex and Survived
+table(train$Sex, train$Survived)
+
+# Two-way comparison: row-wise proportions #1 means row-wise propotion
+prop.table(table(train$Sex, train$Survived), 1)
+```
+
+
+## Does age play a role?
+
+```{r}
+# Create the column child, and indicate whether child or no child
+train$Child <- NA
+train$Child[train$Age < 18] <- 1
+train$Child[train$Age >= 18]<- 0
+
+# Two-way comparison
+prop.table(table(train$Child, train$Survived), 1)
+
+```
+```{r}
+test$Child <- NA
+test$Child[test$Age < 18] <- 1
+test$Child[test$Age >= 18]<- 0
+```
+
+
+```{r}
+#To make a decision tree
+# Rpart: Recursive Partitioning and Regression Trees
+library(rpart)
+
+# Build the decision tree
+my_tree <- rpart(Survived ~ Pclass + Sex + Age + SibSp + Parch + Fare + Embarked, data = train, method = 'class')
+
+# Visualize the decision tree using plot() and text()
+plot(my_tree)
+text(my_tree)
+# The resulting graph of the Decision tree is not so informative
+
+# Load in the packages to build a fancy plot
+library(rattle)
+library(rpart.plot)
+library(RColorBrewer)
+fancyRpartPlot(my_tree)
+```
+
+
+```{r}
+# Make predictions on the test set
+tree_prediction <- predict(my_tree, newdata = test, type = "class")
+
+# Finish the data.frame() call
+tree_solution <- data.frame(PassengerId = test$PassengerId, Survived = tree_prediction)
+
+# Use nrow() on my_solution
+nrow(tree_solution)
+
+# Finish the write.csv() call
+write.csv(tree_solution, file = "tree_solution.csv", row.names = FALSE)
+```
+
+
+
+```{r}
+tree_two <- rpart(Survived ~ Pclass + Sex + Age + SibSp + Parch + Fare + Embarked,data = train, method = "class", control = rpart.control(minsplit = 50, cp = 0))
+
+fancyRpartPlot(tree_two)
+```
+
+Then what about the family size? Will big family need more time to collect and go to the safe boat so they will have less survival rate?
+
+```{r}
+train_two <- train
+train_two$family <- train$SibSp+train$Parch +1s
+tree_three <- rpart(Survived ~ Pclass + Sex + Age + SibSp + Parch  + Fare + Embarked  + family, data = train_two, method = "class")
+fancyRpartPlot(tree_three)
+```
+
+ A valid assumption is that larger families need more time to get together on a sinking ship, and hence have less chance of surviving. According to the tree, looks like the family size is not so important as expected.
+

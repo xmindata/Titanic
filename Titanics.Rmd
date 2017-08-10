@@ -14,19 +14,12 @@ When the Titanic sank, 1502 of the 2224 passengers and crew got killed. One of t
 Let's start with loading in the training and testing set into  R environment. Use the training set to build your model, and the test set to validate it. The data is stored on the web as CSV files; their URLs are already available as character strings in the sample code. Load this data with the read.csv() function.
 
 ```{r load.data}
-# Import the training set: train
-train_url <- "http://s3.amazonaws.com/assets.datacamp.com/course/Kaggle/train.csv"
-train <- read.csv(train_url)
+# Import the training set: train and test
+train <- read.csv("data/train.csv")
+test <- read.csv("data/test.csv")
   
-# Import the testing set: test
-test_url <- "http://s3.amazonaws.com/assets.datacamp.com/course/Kaggle/test.csv"
-test <- read.csv(test_url)
-  
-# Print train and test to the console
-#train
-#test
-
 # str() -> Structure, gives information such as the data types in the data frame (e.g. int for integer), the number of observations, and the number of variables.
+# str() is kinda like the pd.describe() in Pandas
 str(train)
 str(test)
 ```
@@ -50,7 +43,6 @@ prop.table(table(train$Sex, train$Survived), 1)
 
 
 ## Does age play a role?
-
 ```{r}
 # Create the column child, and indicate whether child or no child
 train$Child <- NA
@@ -59,8 +51,8 @@ train$Child[train$Age >= 18]<- 0
 
 # Two-way comparison
 prop.table(table(train$Child, train$Survived), 1)
-
 ```
+
 ```{r}
 test$Child <- NA
 test$Child[test$Age < 18] <- 1
@@ -69,7 +61,7 @@ test$Child[test$Age >= 18]<- 0
 
 
 ```{r}
-#To make a decision tree
+# To make a decision tree
 # Rpart: Recursive Partitioning and Regression Trees
 library(rpart)
 
@@ -80,7 +72,6 @@ my_tree <- rpart(Survived ~ Pclass + Sex + Age + SibSp + Parch + Fare + Embarked
 plot(my_tree)
 text(my_tree)
 # The resulting graph of the Decision tree is not so informative
-
 # Load in the packages to build a fancy plot
 library(rattle)
 library(rpart.plot)

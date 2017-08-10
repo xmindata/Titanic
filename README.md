@@ -1,22 +1,16 @@
 README.md
 ====================
 
-# Titanic data inverstigation
+# Predict survival on the Titanic Disaster
 
-During the Titanic disaster, who is the lucky one, which feature(s) may lead to higher survival rate?
+In this work we will study the passengers data and apply machine learning techniques to predict a passenger's chance of surviving based on their infomration.
 
-The dataset is downloaded from Kaggle competetion, with **"train.csv"** and **"test.csv"**. 
+The dataset is downloaded from Kaggle competetion, with **"train.csv"** and **"test.csv"**. Please go to the [Kaggle website](https://www.kaggle.com/c/titanic) fore more details.
 
-First I did exploratory data analysis for the training data, as shown in **EDA_Titanic.ipynb**, then in order to user machine learning to make the prediction of the survival, in **Titanic_ML.ipynb**, I used Decisiontree, randomForest, and svc to make the prediction. 
-
-## Prediction files##
-my_solution_one.csv: Decisiontree
-my_solution_two.csv: Decisiontree with more features included in the training
-my_solution_three.csv: Decisiontree after creating one freature: Family size
-my_solution_four.csv: Randomforest for the prediction
-my_solution_svc.csv: Use SVC for the prediction
+## Prediction files
+Prediction files can be found in the solution folder. I've compared the performance with different algorithms. So far the Decision Tree has the best prediction score. For more details please check the notebook.
 
 ## Draw ##
 An interactive figure was made with Dimple.js, to show the survival rate with cabinet class.
 
-According to the analysis, cabinet class, sex, Age and Fare are the most important features for the survival during the disaster.
+According to the analysis, cabinet Pclass, sex, Age and Fare are the most important features for predicting the survival during the disaster.
